@@ -5,9 +5,9 @@ def spin
 	rand(-1..36)
 end 
 
-def print_spin(spin) 
-	spin = "00" if spin == -1
-	puts "Spin Value #{spin}"
+def print_spin(value) 
+	value = "00" if value == -1
+	puts "Spin Value #{value}"
 end
 
 
