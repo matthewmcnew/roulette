@@ -1,4 +1,4 @@
-class Martingale
+class JamesBond
 
   def initialize(net_worth, goal, betting_limit)
     puts "#"*50
@@ -6,77 +6,53 @@ class Martingale
     @betting_limit = betting_limit
     @net_worth = net_worth
     @goal = goal
-    @high_numbers = @low_numbers = 0
+    @high_numbers = @low_numbers = @zeros = @middle_numbers = 0
     @multiplier = 1
-    @additonal = 0
     @runs = 0
     @highest_multipler = @multiplier
-
-    @streak = 0
-    @gambling = true
   end
-
-  LOW = 5.freeze
 
   def result(value)
-
-    gamble(value)
-    return
-
-    if @gambling
-      gamble(value)
-    else
-      puts "No Gamble for #{value}"
-    end
-
-    if !(19..36).member?(value)
-      @streak= @streak + 1
-      if @streak == 3
-        @gambling = true
-      end
-    else
-      @streak = 0
-      @gambling = false
-    end
-  end
-
-  def gamble(value)
     @runs = @runs + 1
     if (19..36).member?(value)
       @high_numbers = @high_numbers + 1
-      win = LOW + LOW
+      win = 14 + 14
+    elsif (13..18).member?(value)
+      @middle_numbers = @middle_numbers + 1
+      win = 5*5 + 5
+    elsif (-1..0).member?(value)
+      win = 17*1 + 1
+      @zeros = @zeros +1
     else
       @low_numbers = @low_numbers +1
       win = 0
     end
 
-    win = win*@multiplier + 2*@additonal
-    bet = LOW*@multiplier + @additonal
+    win = win*@multiplier
+    bet = 20*@multiplier
     profit = win - bet
 
     puts "Profit #{profit}"
-    puts "Additonal #{@additonal}"
 
     @net_worth = @net_worth + win
 
     handle_multipler(profit)
   end
 
-
   def keep_going?
-    if (@multiplier*LOW) > @betting_limit
-      print
+    if (@multiplier*20) > @betting_limit
+      puts print
       return false
     end
 
-    if  (@multiplier*LOW + @additonal) > @net_worth || @net_worth > @goal
-      print
+    if @net_worth < (@multiplier*20) || @net_worth > @goal
+      puts print
       return false
     end
 
     puts "Net Worth: #{@net_worth.to_s}"
-    puts "Betting: #{@multiplier*LOW + @additonal}"
-    @net_worth = (@net_worth - LOW*@multiplier - @additonal) if @gambling
+    puts "Betting: #{@multiplier*20}"
+    @net_worth = @net_worth - 20*@multiplier
 
     return true
   end
@@ -93,10 +69,8 @@ class Martingale
   def handle_multipler(win)
     if win > 0
       @multiplier = 1
-      @additonal = 0
-      puts "Back to $#{LOW} Bet"
+      puts "Back to $20 Bet"
     else
-      @additonal = @additonal + 1
       @multiplier = @multiplier * 2
     end
 
@@ -109,6 +83,6 @@ class Martingale
     puts "Run result: #{self.success?}"
     puts "Net Worth: #{@net_worth}"
     puts "Number of Runs: #{@runs}"
-    puts "Higest Bet #{@highest_multipler*LOW}"
+    puts "Higest Bet #{@highest_multipler*20}"
   end
 end
